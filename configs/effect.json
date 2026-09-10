@@ -1,6 +1,5 @@
 {
   "algorithm": "srainr",
-  "strength": 0.75,
-  "denoise": 0.20
+  "strength": 0.82,
+  "denoise": 0.15
 }
-
