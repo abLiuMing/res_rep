@@ -9,15 +9,18 @@ fi
 manifest=$1
 download_dir=$2
 output_dir=$3
-mkdir -p "$output_dir"
+staging_dir="${output_dir}.new"
+rm -rf "$staging_dir"
+mkdir -p "$staging_dir"
 
-cp "$(dirname "$manifest")/../configs/effect.json" "$output_dir/effect.json"
+cp "$(dirname "$manifest")/../configs/effect.json" "$staging_dir/effect.json"
 while read -r name version artifact checksum; do
   case "$name" in ''|'#'*) continue ;; esac
   source_file="$download_dir/$artifact"
   [ -f "$source_file" ] || { echo "missing resource: $source_file" >&2; exit 1; }
-  cp "$source_file" "$output_dir/${name}-${version}.bin"
+  cp "$source_file" "$staging_dir/${name}-${version}.bin"
 done < "$manifest"
 
+rm -rf "$output_dir"
+mv "$staging_dir" "$output_dir"
 echo "resources built in $output_dir"
-
